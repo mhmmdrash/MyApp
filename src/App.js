@@ -1,25 +1,50 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useEffect, useState } from 'react'
+import Web3 from 'web3'
+import detectEthereumProvider from '@metamask/detect-provider';
 
-function App() {
+
+
+const Myapp = () => {
+
+  const [web3Api, setWeb3Api] = useState({
+    provider: null,
+    web3: null
+  })
+
+  useEffect(() => {
+    const loadProvider = async() => {
+      const provider = await detectEthereumProvider();
+      setWeb3Api({
+        web3: new Web3(provider),
+        provider
+      })
+    }
+    loadProvider();
+  }, [])
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      Hello World!
+      <div>
+        Connect your Wallet       
+        <div>
+          <button 
+              onClick={async () => {
+                const accounts = await window.ethereum.request({method: "eth_requestAccounts"})
+                console.log(accounts)
+              }}
+              >
+              Enable Ethereum!
+          </button>
+        </div> 
+        <div>
+          <button>Mint</button>
+        </div>
+      </div>
     </div>
   );
+  
 }
 
-export default App;
+export default Myapp;
